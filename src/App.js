@@ -1,13 +1,14 @@
 import React from 'react';
 import './App.css';
 import DayInfo from './DayInfo'
-import DayInfo2 from './DayInfo2'
+import UserLogin from './UserLogin'
 
 class App extends React.Component {
   constructor(){
     super()
     this.state = {
       latLong: [],
+      user: {}
     }
     this.parseJSON = this.parseJSON.bind(this)
   }
@@ -22,7 +23,6 @@ class App extends React.Component {
     fetch(zipcodeURL)
     .then(this.parseJSON)
     .then(geoInfo => this.setState({latLong: geoInfo.records[0].fields.geopoint}))
-      
   }
 
   parseJSON = (response) => {
@@ -37,7 +37,8 @@ class App extends React.Component {
     return (
       <div className="App">
         <h1>Early Riser</h1>
-        <DayInfo2 latLong={this.state.latLong}/>
+        {/* <UserLogin /> */}
+        <DayInfo latLong={this.state.latLong}/>
       </div>
     )
   }
