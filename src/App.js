@@ -1,26 +1,47 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import DayInfo from './DayInfo'
+import UserLogin from './UserLogin'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor(){
+    super()
+    this.state = {
+      latLong: [],
+      user: {}
+    }
+    this.parseJSON = this.parseJSON.bind(this)
+  }
+
+  componentDidMount(){
+    this.getCoordinates()
+  }
+
+  getCoordinates = () => {
+    const user_zipcode = 80021
+    const zipcodeURL = `https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=${user_zipcode}&facet=state&facet=timezone&facet=dst`
+    fetch(zipcodeURL)
+    .then(this.parseJSON)
+    .then(geoInfo => this.setState({latLong: geoInfo.records[0].fields.geopoint}))
+  }
+
+  parseJSON = (response) => {
+    return response.json()
+  }
+    
+  displayCoor = (response) => {
+    console.log('coordinates: ', response);
+  }
+
+  render(){
+    return (
+      <div className="App">
+        <h1>Early Riser</h1>
+        {/* <UserLogin /> */}
+        <DayInfo latLong={this.state.latLong}/>
+      </div>
+    )
+  }
 }
 
 export default App;
